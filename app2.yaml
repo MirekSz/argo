@@ -1,0 +1,74 @@
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: spring-boot-scw
+spec:
+  serviceName: spring-boot-scw
+  replicas: 2
+  selector:
+    matchLabels:
+      app: spring-boot
+  template:
+    metadata:
+      labels:
+        app: spring-boot
+    spec:
+      containers:
+      - name: spring-boot
+        image: rg.nl-ams.scw.cloud/namespace-mirek/cloud-mvp/mirek-spring-boot:22
+        ports:
+            - containerPort: 8080
+        envFrom:
+            - configMapRef:
+                name: webapp-config    
+        readinessProbe:
+          httpGet:
+            path: /aws/v3/api-docs
+            port: 8080
+          initialDelaySeconds: 20
+          timeoutSeconds: 10
+          periodSeconds: 10
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /aws/v3/api-docs
+            port: 8080
+          initialDelaySeconds: 20
+          timeoutSeconds: 10
+          periodSeconds: 8
+          failureThreshold: 3            
+        volumeMounts:
+        - mountPath: "/data"
+          name: csi-vol-scw
+        - mountPath: "/logs"
+          name: logs          
+      initContainers:
+        - name: logshipper
+          image: alpine:latest
+          restartPolicy: Always
+          command: ['sh', '-c', 'tail -F /opt/cluster-ver.log']
+          volumeMounts:
+            - name: logs
+              mountPath: /opt
+      volumes:
+        - name: logs    
+  volumeClaimTemplates:
+  - metadata:
+      name: csi-vol-scw
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: sbs-5k
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webapp-config
+data:
+  SPRING_PROFILES_ACTIVE: "scaleway"  
+  DATABASE_USER: "boot"
+  DATABASE_PASS: "AdminAdmin321!"  
+  DATABASE_URL: "jdbc:postgresql://172.16.16.8:5432/boot"        
