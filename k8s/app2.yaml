@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: spring-boot
-        image: rg.nl-ams.scw.cloud/namespace-mirek/cloud-mvp/mirek-spring-boot:22
+        image: rg.nl-ams.scw.cloud/namespace-mirek/cloud-mvp/mirek-spring-boot:23
         ports:
             - containerPort: 8080
         envFrom:
