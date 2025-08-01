@@ -5,7 +5,7 @@ metadata:
   name: spring-boot-scw
 spec:
   serviceName: spring-boot-scw
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: spring-boot
