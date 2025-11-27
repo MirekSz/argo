@@ -30,7 +30,7 @@ metadata:
   name: verto-greencell-testowa
   namespace: verto-greencell-testowa
   annotations:
-    external-dns.alpha.kubernetes.io/hostname: verto-bwi.cloud-test-mvp.eu
+    external-dns.alpha.kubernetes.io/hostname: verto-greencell-testowa.cloud-test-mvp.eu
 spec:
   type: LoadBalancer
   ports:
