@@ -39,7 +39,5 @@ spec:
   ports:
     - port: 80
       targetPort: 7070
-    - port: 443
-      targetPort: 7070  
   selector:
     app: verto-greencell-testowa
