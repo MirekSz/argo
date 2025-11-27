@@ -21,6 +21,9 @@ spec:
       containers:
         - name: verto-greencell-testowa
           image: rg.pl-waw.scw.cloud/streamsoft-cloud-test-cr/bwi:1763060535538
+          resources:
+            requests:
+                memory: "4Gi"
           ports:
             - containerPort: 7070
 ---
